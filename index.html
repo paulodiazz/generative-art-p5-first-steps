@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Brise Soleil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <script src="./js/p5.min.js"></script> -->
+    <script>
+      // Generates a random hash and token id each time you reload, in the following format
+      //let tokenData = {"hash":"0xd9134c11cd5ed9798ea0811364d63bd850c69c5d13383c9983ade39847e9ea86","tokenId":"99000000"};
+      
+      function genTokenData(projectNum)
+      {
+          let data = {};
+          let hash = "0x";
+          for (var i = 0; i < 64; i++)
+          {
+              hash += Math.floor(Math.random() * 16).toString(16);
+          }
+          data.hash = hash;
+          data.tokenId = projectNum * 1000000 + Math.floor(Math.random() * 1000);
+          return data;
+      }
+      let tokenData = genTokenData(99);
+    </script>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
+    <script src="./sketch.js?>"></script>
+    
+  </body>
+</html>
