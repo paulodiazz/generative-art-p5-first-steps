@@ -58,7 +58,8 @@ function setup() {
  
   
   //createCanvas(windowHeight, windowWidth, WEBGL);
-  createCanvas(400, 400, WEBGL)
+  createCanvas(1080, 1920, WEBGL)
+  //createCanvas(1920,1080)
   ma= atan(1/sqrt(2));
   maxD= dist(0,0,200,200)
 
@@ -67,14 +68,17 @@ function setup() {
 function draw(){
   noStroke();
   background('black')
-  ortho(-300,300,-300,300,0,1000);
-  pointLight(0, 255, 0,1, 0, -1, 0)
+  ortho(-300,300,-300,300,0,10000);
+  pointLight(255, 0, 0,1, 80,1500,100)
   //directionalLight('black',5, 1,-5)
-  pointLight(0, 0, 255,0, 1,0)
-  pointLight(0, 240, 0,0,-200, -200,-1)
-  pointLight(240,0,0,-1,200,0)
-  pointLight(0,0,240,1,1,1)
-  pointLight(0,0,240,-200,100,100)
+  //pointLight(0, 0, 255,0, 1,0)
+  pointLight(255, 255, 255,0,-500, -500,-100)
+  pointLight(244, 251, 59,-1,200,0)
+  //pointLight(0,0,240,1,1,1)
+  //pointLight(0,0,240,-200,100,100)
+  pointLight(3, 46, 99,0,-1500,500)
+  spotLight(255,0,0,0,-50,500,1,1,-1,PI,10)
+  spotLight(255,0,0,0,-80,500,-1,1,-1,PI,10)
 
   //translate(0,50,-50)
   rotateX(-0.3*PI)
@@ -82,11 +86,11 @@ function draw(){
   
   let offset =0;
   //AGUA
-  for(let z = -height/5; z<height-height/3; z+=w)
+  for(let z = height/2.5; z<height-height/2.5; z+=w)
   {
-    for(let x = 0; x<width; x+=w){
+    for(let x = width/4; x<width-(width/4); x+=w){
       push();
-      let d = dist(x,z,width/2, height/2)
+      let d = dist(x,z,width/2, height/8)
       let offset = map(d,0, maxD,-2,2);
       let a = angle + offset;
       
@@ -98,40 +102,21 @@ function draw(){
       
       pop();
     }
-    offset +=.1;
+    offset +=.01;
     }
-    angle +=0.1;
-//HUMO
-w2=10
-    for(let z = 300; z<height-20; z+=w2)
+    angle +=0.02;
+
+   //Fuego
+    for(let z = height-height/2.7; z<height-height/3.5; z+=w)
   {
-    for(let x = 0; x<width; x+=w2){
+    for(let x = width/4; x<width-width/3; x+=w){
       push();
       let d = dist(x,z,width/2, height/2)
       let offset = map(d,0, maxD,-1,1);
       let a = angle + offset;
       
       translate(x -width/2,0,z-height/2);
-      specularMaterial(250,250,250);
-      let h = map(.5*noise(a), -1,1,200,350);
-      box(w2,h,w2);
-      //rect(x - width/2 + w/2,0,w-2,h);
-      
-      pop();
-    }
-    offset +=.1;
-    }
-    //Fuego
-    for(let z = 400; z<height+220; z+=w)
-  {
-    for(let x = 0; x<width; x+=w){
-      push();
-      let d = dist(x,z,width/2, height/2)
-      let offset = map(d,0, maxD,-1,1);
-      let a = angle + offset;
-      
-      translate(x -width/2,0,z-height/2);
-      emissiveMaterial(120, 7, 7);
+      ambientMaterial(120, 7, 7);
       let h = map(sin(a)+2*noise(a), -1,1,20,100);
       box(w-2,h,w-2);
       //rect(x - width/2 + w/2,0,w-2,h);
@@ -142,16 +127,16 @@ w2=10
     }
 
     //TIERRA
-    for(let z = 100; z<height+100; z+=w)
+    for(let z = height-height/2; z<height-height/3.5; z+=w)
   {
-    for(let x = -250; x<width-450; x+=w){
+    for(let x = -width/3; x<width- width/1.25; x+=w){
       push();
       let d = dist(x,z,width/2, height/2)
       let offset = map(d,0, maxD,-1,1);
       let a = angle + offset;
       
       translate(x -width/2,0,z-height/2);
-      emissiveMaterial(84, 43, 22);
+      ambientMaterial(255);
       let h = map(noise(a), -1,1,100,200);
       box(w-2,h,w-2);
       //rect(x - width/2 + w/2,0,w-2,h);
@@ -161,9 +146,9 @@ w2=10
     offset +=.1;
     }
   //Aire
-  for(let z = -100; z<height+100; z+=w)
+for(let z = -height/2; z<height/2.6; z+=w)
   {
-    for(let x = 450; x<width+200; x+=w){
+    for(let x = width/3; x<width/1.4; x+=w){
       push();
       let d = dist(x,z,width/2, height/2)
       let offset = map(d,0, maxD,-1,1);
@@ -180,9 +165,9 @@ w2=10
     offset +=.1;
     }
     //Aire2
-  for(let z = -600; z<height-500; z+=w)
+for(let z = -height/2; z<height/1.9; z+=w)
   {
-    for(let x = -450; x<width; x+=w){
+    for(let x = width/1.32; x<width+width/3; x+=w){
       push();
       let d = dist(x,z,width/2, height/2)
       let offset = map(d,0, maxD,-1,1);
@@ -197,7 +182,7 @@ w2=10
       pop();
     }
     offset +=.1;
-    }
+    } 
     
   
 
