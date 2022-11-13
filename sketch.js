@@ -48,104 +48,163 @@ var song;
   song = loadSound('Minero.mp3');
 }
  */
+let angle =0;
+let w =24;
+let ma;
+let maxD;
 function setup() { 
   /* mic= new p5.AudioIn();
   mic.start(); */
  
   
-  createCanvas(windowWidth, windowHeight, WEBGL);
-}
-var inc=.01;
+  //createCanvas(windowHeight, windowWidth, WEBGL);
+  createCanvas(400, 400, WEBGL)
+  ma= atan(1/sqrt(2));
+  maxD= dist(0,0,200,200)
 
-var start =0;
-var yoff =0;
+}
 
 function draw(){
-  background(175)
-  var xoff= start;
-   for (var x = start; x<width; x++){
+  noStroke();
+  background('black')
+  ortho(-300,300,-300,300,0,1000);
+  pointLight(0, 255, 0,1, 0, -1, 0)
+  //directionalLight('black',5, 1,-5)
+  pointLight(0, 0, 255,0, 1,0)
+  pointLight(0, 240, 0,0,-200, -200,-1)
+  pointLight(240,0,0,-1,200,0)
+  pointLight(0,0,240,1,1,1)
+  pointLight(0,0,240,-200,100,100)
 
-    var y = noise(xoff) * height;
-    circle(x, y);
-    xoff +=inc;
+  //translate(0,50,-50)
+  rotateX(-0.3*PI)
+  rotateY(ma);
+  
+  let offset =0;
+  //AGUA
+  for(let z = -height/5; z<height-height/3; z+=w)
+  {
+    for(let x = 0; x<width; x+=w){
+      push();
+      let d = dist(x,z,width/2, height/2)
+      let offset = map(d,0, maxD,-2,2);
+      let a = angle + offset;
+      
+      translate(x -width/2,0,z-height/2);
+      ambientMaterial(0,0,255);
+      let h = map(cos(a+offset), -1,1,0,100);
+      box(w-2,h,w-2);
+      //rect(x - width/2 + w/2,0,w-2,h);
+      
+      pop();
+    }
+    offset +=.1;
+    }
+    angle +=0.1;
+//HUMO
+w2=10
+    for(let z = 300; z<height-20; z+=w2)
+  {
+    for(let x = 0; x<width; x+=w2){
+      push();
+      let d = dist(x,z,width/2, height/2)
+      let offset = map(d,0, maxD,-1,1);
+      let a = angle + offset;
+      
+      translate(x -width/2,0,z-height/2);
+      specularMaterial(250,250,250);
+      let h = map(.5*noise(a), -1,1,200,350);
+      box(w2,h,w2);
+      //rect(x - width/2 + w/2,0,w-2,h);
+      
+      pop();
+    }
+    offset +=.1;
+    }
+    //Fuego
+    for(let z = 400; z<height+220; z+=w)
+  {
+    for(let x = 0; x<width; x+=w){
+      push();
+      let d = dist(x,z,width/2, height/2)
+      let offset = map(d,0, maxD,-1,1);
+      let a = angle + offset;
+      
+      translate(x -width/2,0,z-height/2);
+      emissiveMaterial(120, 7, 7);
+      let h = map(sin(a)+2*noise(a), -1,1,20,100);
+      box(w-2,h,w-2);
+      //rect(x - width/2 + w/2,0,w-2,h);
+      
+      pop();
+    }
+    offset +=.1;
+    }
+
+    //TIERRA
+    for(let z = 100; z<height+100; z+=w)
+  {
+    for(let x = -250; x<width-450; x+=w){
+      push();
+      let d = dist(x,z,width/2, height/2)
+      let offset = map(d,0, maxD,-1,1);
+      let a = angle + offset;
+      
+      translate(x -width/2,0,z-height/2);
+      emissiveMaterial(84, 43, 22);
+      let h = map(noise(a), -1,1,100,200);
+      box(w-2,h,w-2);
+      //rect(x - width/2 + w/2,0,w-2,h);
+      
+      pop();
+    }
+    offset +=.1;
+    }
+  //Aire
+  for(let z = -100; z<height+100; z+=w)
+  {
+    for(let x = 450; x<width+200; x+=w){
+      push();
+      let d = dist(x,z,width/2, height/2)
+      let offset = map(d,0, maxD,-1,1);
+      let a = angle + offset;
+      
+      translate(x -width/2,0,z-height/2);
+      ambientMaterial(255);
+      let h = map(sin(a), -1,1,10,70);
+      box(w-10,h,w-10);
+      //rect(x - width/2 + w/2,0,w-2,h);
+      
+      pop();
+    }
+    offset +=.1;
+    }
+    //Aire2
+  for(let z = -600; z<height-500; z+=w)
+  {
+    for(let x = -450; x<width; x+=w){
+      push();
+      let d = dist(x,z,width/2, height/2)
+      let offset = map(d,0, maxD,-1,1);
+      let a = angle + offset;
+      
+      translate(x -width/2,0,z-height/2);
+      ambientMaterial(255);
+      let h = map(sin(a), -1,1,10,70);
+      box(w-10,h,w-10);
+      //rect(x - width/2 + w/2,0,w-2,h);
+      
+      pop();
+    }
+    offset +=.1;
+    }
     
-   }
-
-   var x = map(noise(xoff), 0, 1 ,0 ,width);
-
-   start+=inc;
   
 
-
-//tierra
-  for (var y = R.rango(2,10); y <= R.rango(10,15); y++) {
-    for (var x = -10; x <= 10; x++) {
-      for (var z = -4; z <= 4; z++) {
-
-        push();
-        translate(20 * x, 20 * y, 20 * z);
-        rotateX(radians(t*2));
-        var boxScale = map(noise(t/2), -1, 1, 5, 10);
-        normalMaterial();
-        sphere(noise(t)*(boxScale)); //* sin(t/10));
-        pop();
-
-      }
-    }
   }
-
-
-  //agua
-
-  for (var y = 4; y <= 8; y++) {
-    for (var x = -10; x <= 0; x++) {
-      for (var z = -4; z <= 4; z++) {
-
-        push();
-        translate(20 * (x+noise(t/2)), 20 * (y+noise(t/2)), 20 * z);
-        rotateX(radians(t*2));
-        var boxScale = map(sin(t/2), -1, 1, 5, 10);
-        fill(0,0,250);
-        box(boxScale); //* sin(t/10));
-        pop();
-       push();
-        translate(20 * x, 20 * y, 20 * z);
-        rotateX(radians(t*2));
-        var boxScale = map(sin(t/2), -1, 1, 5, 10);
-        fill(250,0,0);
-        box(noise(t)*boxScale); //* sin(t/10));
-        pop();
-      }
-    }
-  }
-
-  //fuego
-  for (var y = -10; y <= 10; y++) {
-    for (var x = 4; x <= 10; x++) {
-      for (var z = -4; z <= 4; z++) {
-
-        push();
-        translate(20 * x, 20*y, 20 * z);
-        rotateX(radians(t*2));
-        var boxScale = map(sin(t/2), -1, 1, 5, 10);
-        fill(255);
-        box(boxScale); //* sin(t/10));
-        pop();
-      }
-    }
-  }
+  
 
   
-  
-  /* directionalLight(155, 100, 0, 1, -10, 0, sin(t / 2));
-  directionalLight(20, 85, 0, 1, 2, 0, cos(t / 2));
-  directionalLight(0, 0, 50, 1, 0, sin(t / 2), -2); */
-  spotLight(255, 0, 0, -1, -1, -1, 0, 0, 0)
-  
-  
-  t += 0.1;
-}
-
-function windowResized() {
+/* function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
-}
+} */
