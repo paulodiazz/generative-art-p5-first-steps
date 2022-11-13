@@ -1,53 +1,52 @@
-//Funcion random
+let recording = false;
+let recorder;
+let chunks = [];
 
-const hashPairs = [];
-for (let j = 0; j < 32; j++) {
-  hashPairs.push(tokenData.hash.slice(2 + (j * 2), 4 + (j * 2)));
-}
-const dcP = hashPairs.map(x => {
-  return parseInt(x, 16);
-});
+const fr = 30;
 
-const seed = parseInt(tokenData.hash.slice(2, 10), 16);
-
-class Random {
-  constructor(seed) {
-    this.seed = seed
-  }
-  random_dec() {
-    this.seed ^= this.seed << 13
-    this.seed ^= this.seed >> 17
-    this.seed ^= this.seed << 5
-    return ((this.seed < 0 ? ~this.seed + 1 : this.seed) % 1000) / 1000
-  }
-  rango(a, b) {
-    return a + (b - a) * this.random_dec()
-  }
-  r_int(a, b) {
-    return Math.floor(this.rango(a, b+1))
-  }
-  pick(x) {
-    return x[Math.floor(this.rango(0, x.length * 0.99))]
-  }
+function record() {
+  chunks.length = 0;
+  
+  let stream = document.querySelector('canvas').captureStream(fr);
+  
+  recorder = new MediaRecorder(stream);
+  
+  recorder.ondataavailable = e => {
+    if (e.data.size) {
+      chunks.push(e.data);
+    }
+  };
+  
+  recorder.onstop = exportVideo;
+  
 }
 
-let R = new Random(seed);
+function exportVideo(e) {
+  var blob = new Blob(chunks, { 'type' : 'video/webm' });
 
-function make2DArray(cols, rows){
-  let arr = new Array(cols);
-  for (let i =0 ; i>arr.length; i++)
-    arr[i] = Array(rows);
+    // Draw video to screen
+    var videoElement = document.createElement('video');
+    videoElement.setAttribute("id", Date.now());
+    videoElement.controls = true;
+    document.body.appendChild(videoElement);
+    videoElement.src = window.URL.createObjectURL(blob);
+  
+  // Download the video 
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  document.body.appendChild(a);
+  a.style = 'display: none';
+  a.href = url;
+  a.download = 'newVid.webm';
+  a.click();
+  window.URL.revokeObjectURL(url);
+
 }
 
-//P5
-var t = 45
-var mic;
-var song;
 
-/* function preload() {
-  song = loadSound('Minero.mp3');
-}
- */
+// taken from pr.js docs
+var x, y;
+
 let angle =0;
 let w =24;
 let ma;
@@ -59,13 +58,39 @@ function setup() {
   
   //createCanvas(windowHeight, windowWidth, WEBGL);
   createCanvas(1080, 1920, WEBGL)
+  frameRate(fr);
+  record();
+  x = 1920 / 2
+  y = 1080
   //createCanvas(1920,1080)
   ma= atan(1/sqrt(2));
   maxD= dist(0,0,200,200)
 
 }
 
-function draw(){
+function keyPressed() {
+    
+  // toggle recording true or false
+  recording = !recording
+  console.log(recording);
+  
+  // 82 is keyCode for r 
+  // if recording now true, start recording 
+  if (keyCode === 82 && recording ) {
+    
+    console.log("recording started!");
+    recorder.start();
+  } 
+  
+  // if we are recording, stop recording 
+  if (keyCode === 82 && !recording) {  
+    console.log("recording stopped!");
+    recorder.stop();
+  }
+  
+}
+
+function draw() {
   noStroke();
   background('black')
   ortho(-300,300,-300,300,0,10000);
@@ -183,13 +208,4 @@ for(let z = -height/2; z<height/1.9; z+=w)
     }
     offset +=.1;
     } 
-    
-  
-
-  }
-  
-
-  
-/* function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-} */
+}
