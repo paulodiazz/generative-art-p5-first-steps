@@ -66,6 +66,9 @@ function setup() {
 }
 
 function draw(){
+  if (frameCount===1){
+    capturer.start();
+  }
   noStroke();
   background('black')
   ortho(-300,300,-300,300,0,10000);
@@ -184,6 +187,12 @@ for(let z = -height/2; z<height/1.9; z+=w)
     offset +=.1;
     } 
     
+    if(frameCount <120){
+      capturer.capture(canvas)
+    } else if (frameCount===60){
+      capturer.save()
+      capturer.stop()
+    }
   
 
   }
