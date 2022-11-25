@@ -58,7 +58,7 @@ function setup() {
  
   
   //createCanvas(windowHeight, windowWidth, WEBGL);
-  createCanvas(1080, 1920, WEBGL)
+  createCanvas(1080, 1080, WEBGL)
   //createCanvas(1920,1080)
   ma= atan(1/sqrt(2));
   maxD= dist(0,0,200,200)
@@ -67,8 +67,8 @@ function setup() {
 
 function draw(){
   if (frameCount===1){
-    capturer.start();
-  }
+  capturer.start();
+ }
   noStroke();
   background('black')
   ortho(-300,300,-300,300,0,10000);
@@ -110,7 +110,7 @@ function draw(){
     angle +=0.02;
 
    //Fuego
-    for(let z = height-height/2.7; z<height-height/3.5; z+=w)
+    for(let z = height-height/2.7; z<height-height/6; z+=w)
   {
     for(let x = width/4; x<width-width/3; x+=w){
       push();
@@ -120,7 +120,7 @@ function draw(){
       
       translate(x -width/2,0,z-height/2);
       ambientMaterial(120, 7, 7);
-      let h = map(sin(a)+2*noise(a), -1,1,20,100);
+      let h = map(sin(a)+2*noise(a*8), -1,1,20,100);
       box(w-2,h,w-2);
       //rect(x - width/2 + w/2,0,w-2,h);
       
@@ -187,15 +187,15 @@ for(let z = -height/2; z<height/1.9; z+=w)
     offset +=.1;
     } 
     
-    if(frameCount <120){
+    if(frameCount <1800){
       capturer.capture(canvas)
-    } else if (frameCount===60){
+    } else if (frameCount===1800){
       capturer.save()
       capturer.stop()
     }
   
 
-  }
+ }
   
 
   
